@@ -1,4 +1,4 @@
- package com.example.mypackagedeliver
+ package com.example.mypackagedeliver.views
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -6,7 +6,8 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
-import com.example.mypackagedeliver.models.packeges
+import com.example.mypackagedeliver.R
+import com.example.mypackagedeliver.models.Parcel
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
@@ -60,8 +61,8 @@ import com.google.firebase.ktx.Firebase
          }
 
          }
-     fun insertIntoFireBase(count: Int, owner: String, type: String, weight: String, lng: String, lat: String, address: String, fragile: String) :packeges {
-         val pack: packeges = packeges()
+     fun insertIntoFireBase(count: Int, owner: String, type: String, weight: String, lng: String, lat: String, address: String, fragile: String) :Parcel {
+         val pack: Parcel = Parcel()
          pack.pkg_id = count
          pack.owner = owner
          pack.type = type

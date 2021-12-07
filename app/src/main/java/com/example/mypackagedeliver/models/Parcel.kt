@@ -3,7 +3,7 @@ package com.example.mypackagedeliver.models
 /**
  * class that represent a package
  */
-class packeges {
+class Parcel {
     var pkg_id: Int = 0
     lateinit var owner : String
     lateinit var owner_address : String
