@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">my package deliver</string>
     <string name="storage"> insert package to store</string>
+    <string-array name="package_type">
+        <item>Envelop</item>
+        <item>Small package</item>
+        <item>Big package</item>
+    </string-array>
 </resources>

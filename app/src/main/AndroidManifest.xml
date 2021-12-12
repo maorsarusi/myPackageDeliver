@@ -11,6 +11,7 @@
         android:theme="@style/Theme.MyPackageDeliver">
         <activity
             android:name=".views.Home"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".views.SplashActivity"
