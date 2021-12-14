@@ -24,18 +24,19 @@ class loginActivity : AppCompatActivity() {
             val passwordString = password.text.toString()
             val database = Firebase.database
             val users_db = database.getReference("users")
+
+            val intent = Intent(this, Home::class.java)
+
             if (true) {
 
                 button.isEnabled=true
                 Toast.makeText(applicationContext, "The login was successful", Toast.LENGTH_LONG)
                     .show()
-
+                startActivity(intent)
             } else {
                 Toast.makeText(applicationContext, "for register click on \"register now\"", Toast.LENGTH_LONG).show()
 
             }
-            val intent = Intent(this, Home::class.java)
-            startActivity(intent)
         }
         val buttonRegister: Button = findViewById(R.id.openRegisterActivity)
         button.setOnClickListener {
