@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">my package deliver</string>
     <string name="storage"> insert package to store</string>
+    <string name="action_sign_in" />
+    <string name="prompt_password" />
+    <string name="action_sign_in_short" />
+    <string name="prompt_email" />
+    <string name="register_now" />
     <string-array name="package_type">
         <item>Envelop</item>
         <item>Small package</item>
