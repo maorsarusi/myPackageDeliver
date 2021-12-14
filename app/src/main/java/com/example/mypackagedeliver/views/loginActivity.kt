@@ -8,6 +8,7 @@ import android.widget.EditText
 import android.widget.Toast
 import com.example.mypackagedeliver.R
 import com.example.mypackagedeliver.models.User
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
@@ -22,21 +23,26 @@ class loginActivity : AppCompatActivity() {
         button.setOnClickListener {
             val userNameString = userName.text.toString()
             val passwordString = password.text.toString()
-            val database = Firebase.database
-            val users_db = database.getReference("users")
+            val dataBase = FirebaseDatabase.getInstance()
+            val users_db = dataBase.getReference("users")
+            val User1 = users_db.child(userNameString)
 
-            val intent = Intent(this, Home::class.java)
+            if (User1.get()==null) {
 
-            if (true) {
-
-                button.isEnabled=true
+                button.isEnabled = true
                 Toast.makeText(applicationContext, "The login was successful", Toast.LENGTH_LONG)
                     .show()
-                startActivity(intent)
+
             } else {
-                Toast.makeText(applicationContext, "for register click on \"register now\"", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    applicationContext,
+                    "for register click on \"register now\"",
+                    Toast.LENGTH_LONG
+                ).show()
 
             }
+            val intent = Intent(this, Home::class.java)
+            startActivity(intent)
         }
         val buttonRegister: Button = findViewById(R.id.openRegisterActivity)
         button.setOnClickListener {

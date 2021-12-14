@@ -26,7 +26,7 @@ class registerActivity : AppCompatActivity() {
                 val userNameString = userName.text.toString()
                 val passwordString=password.text.toString()
                 val user = insertIntoFireBase(userNameString,passwordString)
-                users_db.push().setValue(user)
+                users_db.child(user.username).setValue(user)
                 Toast.makeText(applicationContext, "The registration was successful", Toast.LENGTH_LONG).show()
                 val intent = Intent(this, loginActivity::class.java)
                 startActivity(intent)
