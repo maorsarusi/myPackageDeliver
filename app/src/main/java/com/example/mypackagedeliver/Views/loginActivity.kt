@@ -1,4 +1,4 @@
-package com.example.mypackagedeliver.views
+package com.example.mypackagedeliver.Views
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,10 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.example.mypackagedeliver.R
-import com.example.mypackagedeliver.models.User
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 
 class loginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

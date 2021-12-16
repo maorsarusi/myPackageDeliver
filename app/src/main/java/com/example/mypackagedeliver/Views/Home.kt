@@ -1,4 +1,4 @@
- package com.example.mypackagedeliver.views
+ package com.example.mypackagedeliver.Views
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
