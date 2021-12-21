@@ -21,7 +21,7 @@ class registerActivity : AppCompatActivity() {
         val button: Button = findViewById(R.id.register)
         button.setOnClickListener{
             val database = Firebase.database
-            if(!(userName.text.equals(""))||password.text.equals("")){
+            if(!((userName.text.toString().equals(""))||password.text.toString().equals(""))){
                 val users_db = database.getReference("users")
                 val userNameString = userName.text.toString()
                 val passwordString=password.text.toString()
