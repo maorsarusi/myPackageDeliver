@@ -18,6 +18,7 @@ import com.google.firebase.ktx.Firebase
 
          val button: Button = findViewById(R.id.storage)
          var count: Int = 1
+         /// array for the spinner
          val typesArray = arrayOf("Envelop", "Big package", "Small package")
          val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, typesArray)
 
