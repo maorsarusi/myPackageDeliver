@@ -1,11 +1,11 @@
- package com.example.mypackagedeliver.Views
+ package com.example.mypackagedeliver.UI.MainActivity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
 import com.example.mypackagedeliver.R
-import com.example.mypackagedeliver.models.*
+import com.example.mypackagedeliver.Entities.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 

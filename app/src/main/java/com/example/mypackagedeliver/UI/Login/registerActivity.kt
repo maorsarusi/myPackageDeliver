@@ -1,4 +1,4 @@
-package com.example.mypackagedeliver.Views
+package com.example.mypackagedeliver.UI.Login
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,7 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.example.mypackagedeliver.R
-import com.example.mypackagedeliver.models.User
+import com.example.mypackagedeliver.Entities.User
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 

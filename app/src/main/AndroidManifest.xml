@@ -10,17 +10,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyPackageDeliver">
         <activity
-            android:name=".Views.loginActivity"
+            android:name=".UI.Login.loginActivity"
             android:exported="false" />
         <activity
-            android:name=".Views.registerActivity"
+            android:name=".UI.Login.registerActivity"
             android:exported="false" />
         <activity
-            android:name=".Views.Home"
+            android:name=".UI.MainActivity.Home"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Views.SplashActivity"
+            android:name=".UI.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

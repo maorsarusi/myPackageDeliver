@@ -1,4 +1,4 @@
-package com.example.mypackagedeliver.models
+package com.example.mypackagedeliver.Entities
 
 /**
  * class that represent a package

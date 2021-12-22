@@ -1,10 +1,11 @@
-package com.example.mypackagedeliver.Views
+package com.example.mypackagedeliver.UI
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import com.example.mypackagedeliver.R
+import com.example.mypackagedeliver.UI.Login.loginActivity
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
