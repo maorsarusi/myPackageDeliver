@@ -22,8 +22,10 @@ class Home : AppCompatActivity() {
         * */
         val user = intent.getStringExtra("user_id")
         val pass = intent.getStringExtra("password_id")
+        val x = FirebaseAuth.getInstance().currentUser
+        val name = x?.email
         val hellov: TextView = findViewById(R.id.helloView)
-        hellov.text = "hello $user"
+        hellov.text = "hello $name"
         val lobutton: Button = findViewById(R.id.logoutButton)
         lobutton.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
@@ -33,9 +35,8 @@ class Home : AppCompatActivity() {
 
         val button: Button = findViewById(R.id.storage)
         var count: Int = 1
-        /// array for the spinner
-        val typesArray = arrayOf("Envelop", "Big package", "Small package")
-        val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, typesArray)
+
+        val arrayAdapter = ArrayAdapter<Types>(this, android.R.layout.simple_spinner_item, Types.values())
 
         val spinner: Spinner = findViewById<Spinner>(R.id.types)
         spinner.adapter = arrayAdapter
@@ -53,10 +54,14 @@ class Home : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-
-                typeText.text = typesArray[position]
-                type = typesArray[position]
-
+                when (position) {
+                    0 -> {typeText.text = Types.Envelop.type
+                          type = Types.Envelop.type}
+                    1 -> { typeText.text = Types.Small.type
+                           type = Types.Small.type}
+                    2 -> {typeText.text = Types.Big.type
+                             type = Types.Big.type}
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -93,6 +98,10 @@ class Home : AppCompatActivity() {
             val editText5 = findViewById<EditText>(R.id.editTextName5)
             val address = editText5.text.toString()
 
+            val editText6 = findViewById<EditText>(R.id.editTextPhone)
+
+            val phone = editText6.text.toString()
+
 
             val checkBox = findViewById<CheckBox>(R.id.checkBox)
             val answer = checkBox.isChecked
@@ -105,7 +114,7 @@ class Home : AppCompatActivity() {
             }
 
 
-            val pack = insertIntoFireBase(count, owner, type, weight, lng, lat, address, fragile)
+            val pack = insertIntoFireBase(count, owner, type, weight, lng, lat, address, fragile, phone)
 
             packeges_db.push().setValue(pack)
             Toast.makeText(
@@ -126,9 +135,10 @@ class Home : AppCompatActivity() {
         lng: String,
         lat: String,
         address: String,
-        fragile: String
+        fragile: String,
+        phone: String
     ): Parcel {
-        return Parcel(count, owner, address, type, weight, lng, lat, fragile)
+        return Parcel(count, owner, address, type, weight, lng, lat, fragile, phone)
 
     }
 

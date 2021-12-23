@@ -18,7 +18,8 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(R.layout.activity_register)
         val buttonLogin: Button = findViewById(R.id.loginButton)
         buttonLogin.setOnClickListener {
-            onBackPressed()
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
         }
 
         val email = findViewById<EditText>(R.id.email)
@@ -48,7 +49,7 @@ class RegisterActivity : AppCompatActivity() {
                             val intent = Intent(this, LoginActivity::class.java)
                             intent.putExtra("user_id", firebaseUser.uid)
                             intent.putExtra("password_id", passwordString)
-                            startActivity(intent)
+
                             finish()
                         } else {
                             Toast.makeText(

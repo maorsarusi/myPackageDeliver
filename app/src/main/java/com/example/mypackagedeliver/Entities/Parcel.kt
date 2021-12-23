@@ -12,4 +12,5 @@ data class Parcel
  val weight : String,
  val lng : String,
  val lat : String,
- val fragile : String)
+ val fragile : String,
+ val phone : String)
