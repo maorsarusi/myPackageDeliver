@@ -1,5 +1,5 @@
 package com.example.mypackagedeliver.Entities
 
-class userDataBase {
+class UserDataBase {
 
 }

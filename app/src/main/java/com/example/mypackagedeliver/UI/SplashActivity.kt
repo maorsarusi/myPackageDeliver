@@ -5,8 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import com.example.mypackagedeliver.R
-import com.example.mypackagedeliver.UI.Login.loginActivity
-import com.example.mypackagedeliver.UI.Login.registerActivity
+import com.example.mypackagedeliver.UI.Login.RegisterActivity
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,7 +15,7 @@ class SplashActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         Handler().postDelayed({
-          val intent = Intent (this@SplashActivity, registerActivity::class.java)
+          val intent = Intent (this@SplashActivity, RegisterActivity::class.java)
           startActivity(intent)
             finish()
         },

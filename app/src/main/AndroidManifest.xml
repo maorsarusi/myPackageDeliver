@@ -10,10 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyPackageDeliver">
         <activity
-            android:name=".UI.Login.loginActivity"
+            android:name=".UI.Login.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".UI.Login.registerActivity"
+            android:name=".UI.Login.RegisterActivity"
             android:exported="false" />
         <activity
             android:name=".UI.MainActivity.Home"
