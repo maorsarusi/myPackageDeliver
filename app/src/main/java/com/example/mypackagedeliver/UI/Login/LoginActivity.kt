@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatTextView
 import com.example.mypackagedeliver.R
 import com.example.mypackagedeliver.UI.MainActivity.Home
 import com.google.firebase.auth.FirebaseAuth
@@ -17,23 +19,24 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        val buttonRegister: Button = findViewById(R.id.openRegisterActivity)
+
+        val buttonRegister: AppCompatTextView = findViewById(R.id.textViewLinkRegister)
         buttonRegister.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
-        val email = findViewById<EditText>(R.id.emailLogin)
-        val phoneNum = findViewById<EditText>(R.id.phoneNumberLogin)
-        val password = findViewById<EditText>(R.id.passwordLogin)
-        val button1: Button = findViewById(R.id.login)
-        button1.setOnClickListener {
+
+
+        val email = findViewById<EditText>(R.id.textInputEditTextEmail)
+        val password = findViewById<EditText>(R.id.textInputEditTextPassword)
+        val buttonLogin: AppCompatButton = findViewById(R.id.appCompatButtonLogin)
+        buttonLogin.setOnClickListener {
 
             val emailString = email.text.toString().trim { it <= ' ' }
             val passwordString = password.text.toString().trim { it <= ' ' }
-            val phoneNumString = phoneNum.text.toString().trim { it <= ' ' }
             val database = Firebase.database
 
-            if (!((emailString == "") || passwordString == "" || phoneNumString == "")) {
+            if (!((emailString.isBlank()) || passwordString.isBlank())) {
                 FirebaseAuth.getInstance()
                     .signInWithEmailAndPassword(emailString, passwordString)
                     .addOnCompleteListener { task ->
@@ -46,7 +49,7 @@ class LoginActivity : AppCompatActivity() {
                             )
                                 .show()
                             val intent = Intent(this, Home::class.java)
-                            intent.putExtra("user_id", FirebaseAuth.getInstance().currentUser!!.uid)
+                            intent.putExtra("user", FirebaseAuth.getInstance().currentUser)
                             startActivity(intent)
                             finish()
                         } else {

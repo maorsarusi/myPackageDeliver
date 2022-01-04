@@ -20,7 +20,7 @@ class Home : AppCompatActivity() {
         /*
         * binding the logout bouttn and the hello textview
         * */
-        val user = intent.getStringExtra("user_id")
+        val user = intent.getStringExtra("user")
         val pass = intent.getStringExtra("password_id")
         val x = FirebaseAuth.getInstance().currentUser
         val name = x?.email
@@ -116,7 +116,7 @@ class Home : AppCompatActivity() {
 
             val pack = insertIntoFireBase(count, owner, type, weight, lng, lat, address, fragile, phone)
 
-            packeges_db.push().setValue(pack)
+            packeges_db.child(count.toString()).setValue(pack)
             Toast.makeText(
                 applicationContext,
                 "the package with id $count is stored",
