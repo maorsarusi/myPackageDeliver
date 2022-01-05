@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/colorActivatedHighlight"
+    android:background="@color/colorBackground"
     tools:context=".UI.SplashActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="package deliver V 1.0"
-        android:textColor="#006600"
+        android:text="Package Deliver V 1.0"
+        android:textColor="@color/purple_200"
         android:textStyle="bold
 "
         app:layout_constraintBottom_toBottomOf="parent"

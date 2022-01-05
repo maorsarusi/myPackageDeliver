@@ -13,17 +13,20 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.database.FirebaseDatabase
+
+import android.widget.TextView
+import com.example.mypackagedeliver.Entities.User
+
 
 class RegisterActivity : AppCompatActivity() {
+
+    var mFirebaseAuth: FirebaseAuth? = null
+    var firebaseDatabase: FirebaseDatabase? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
-        val buttonLogin: AppCompatTextView = findViewById(R.id.appCompatTextViewLoginLink)
-        buttonLogin.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-        }
-
 
         val firstName = findViewById<EditText>(R.id.textInputEditTextFirstName)
         val lastName = findViewById<EditText>(R.id.textInputEditTextLastName)
@@ -32,6 +35,15 @@ class RegisterActivity : AppCompatActivity() {
         val idNum = findViewById<EditText>(R.id.textInputEditTextID)
         val password = findViewById<EditText>(R.id.textInputEditTextPassword)
         val confirmPassword = findViewById<EditText>(R.id.textInputEditTextConfirmPassword)
+
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+
+        val buttonLogin: AppCompatTextView = findViewById(R.id.appCompatTextViewLoginLink)
+        buttonLogin.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
 
         val regButton: AppCompatButton = findViewById(R.id.appCompatButtonRegister)
         regButton.setOnClickListener {
@@ -43,37 +55,79 @@ class RegisterActivity : AppCompatActivity() {
             val idNumString = idNum.text.toString().trim { it <= ' ' }
             val passwordString = password.text.toString().trim { it <= ' ' }
             val confirmPasswordString = confirmPassword.text.toString().trim { it <= ' ' }
-            val database = Firebase.database
 
-            if (!((firstNameString.isBlank()) || (lastNameString.isBlank()) || emailString.isBlank()
-                        || addressString.isBlank() || idNumString.isBlank() || passwordString == ""
-                        || confirmPasswordString != passwordString)
-            ) {
-                FirebaseAuth.getInstance()
-                    .createUserWithEmailAndPassword(emailString, passwordString)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            val firebaseUser: FirebaseUser = task.result!!.user!!
-                            Toast.makeText(
-                                this,
-                                "You have successfully registered",
-                                Toast.LENGTH_SHORT
-                            )
-                                .show()
-                            val intent = Intent(this, LoginActivity::class.java)
-                            intent.putExtra("user_id", firebaseUser.uid)
-                            intent.putExtra("password_id", passwordString)
+            when {
+                emailString.isEmpty() -> {
+                    email.error = "Please provide email id";
+                    email.requestFocus();
+                }
+                firstNameString.isEmpty() -> {
+                    firstName.error = "Please provide your first name";
+                    firstName.requestFocus();
+                }
+                lastNameString.isEmpty() -> {
+                    lastName.error = "Please provide your last name";
+                    lastName.requestFocus();
+                }
+                addressString.isEmpty() -> {
+                    address.error = "Please provide your address";
+                    address.requestFocus();
+                }
+                idNumString.isEmpty() -> {
+                    idNum.error = "Please provide your id";
+                    idNum.requestFocus();
+                }
+                idNumString.length != 9 -> {
+                    idNum.error = "Please provide 9-digit id";
+                    idNum.requestFocus();
+                }
+                passwordString.isEmpty() -> {
+                    password.error = "Please provide password";
+                    password.requestFocus();
+                }
+                confirmPasswordString.isEmpty() -> {
+                    confirmPassword.error = "Please provide confirm password";
+                    confirmPassword.requestFocus();
+                }
+                passwordString != confirmPasswordString -> {
+                    confirmPassword.error = "Please provide identical Passwords";
+                    confirmPassword.requestFocus();
+                }
+                else -> {
+                    mFirebaseAuth!!.createUserWithEmailAndPassword(emailString, passwordString)
+                        .addOnCompleteListener { task ->
+                            if (!task.isSuccessful) {
+                                Toast.makeText(
+                                    this,
+                                    "SignUp Unsuccessful, please Try Again!" +
+                                            task.exception!!.message.toString(),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                val currentUser = User(
+                                    addressString,
+                                    emailString,
+                                    firstNameString,
+                                    lastNameString,
+                                    idNumString.toInt(),
+                                )
+                                val uid = task.result!!.user!!.uid
+                                firebaseDatabase!!.getReference("users").child(uid).setValue(currentUser)
+                                    .addOnSuccessListener {
+                                        if (task.isSuccessful) {
+                                            Toast.makeText(
+                                                this,
+                                                "You have successfully registered",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
 
-                            finish()
-                        } else {
-                            Toast.makeText(
-                                this,
-                                task.exception!!.message.toString(),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                                            val intent = Intent(this, LoginActivity::class.java)
+                                            finish()
+                                        }
+                                    }
+                            }
                         }
-                    }
-
+                }
             }
         }
     }
