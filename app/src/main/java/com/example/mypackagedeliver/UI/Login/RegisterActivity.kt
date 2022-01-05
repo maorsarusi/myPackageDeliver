@@ -57,29 +57,33 @@ class RegisterActivity : AppCompatActivity() {
             val confirmPasswordString = confirmPassword.text.toString().trim { it <= ' ' }
 
             when {
-                emailString.isEmpty() -> {
-                    email.error = "Please provide email id";
-                    email.requestFocus();
-                }
                 firstNameString.isEmpty() -> {
-                    firstName.error = "Please provide your first name";
-                    firstName.requestFocus();
+                    firstName.error = "Please provide your first name"
+                    firstName.requestFocus()
                 }
                 lastNameString.isEmpty() -> {
-                    lastName.error = "Please provide your last name";
-                    lastName.requestFocus();
+                    lastName.error = "Please provide your last name"
+                    lastName.requestFocus()
+                }
+                emailString.isEmpty() -> {
+                    email.error = "Please provide email id"
+                    email.requestFocus()
                 }
                 addressString.isEmpty() -> {
-                    address.error = "Please provide your address";
-                    address.requestFocus();
+                    address.error = "Please provide your address"
+                    address.requestFocus()
                 }
                 idNumString.isEmpty() -> {
-                    idNum.error = "Please provide your id";
-                    idNum.requestFocus();
+                    idNum.error = "Please provide your id"
+                    idNum.requestFocus()
                 }
                 idNumString.length != 9 -> {
-                    idNum.error = "Please provide 9-digit id";
-                    idNum.requestFocus();
+                    idNum.error = "Please provide 9-digit id"
+                    idNum.requestFocus()
+                }
+                !idValidator(idNumString) -> {
+                    idNum.error = "Invalid ID"
+                    idNum.requestFocus()
                 }
                 passwordString.isEmpty() -> {
                     password.error = "Please provide password";
@@ -112,7 +116,8 @@ class RegisterActivity : AppCompatActivity() {
                                     idNumString.toInt(),
                                 )
                                 val uid = task.result!!.user!!.uid
-                                firebaseDatabase!!.getReference("users").child(uid).setValue(currentUser)
+                                firebaseDatabase!!.getReference("users").child(uid)
+                                    .setValue(currentUser)
                                     .addOnSuccessListener {
                                         if (task.isSuccessful) {
                                             Toast.makeText(
@@ -130,5 +135,16 @@ class RegisterActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun idValidator(id: String): Boolean {
+        var sum: Int = 0
+        for (i in 0..8) {
+            val incNum = id[i].digitToInt() * ((i % 2) + 1)
+            sum += incNum
+            if (incNum > 9)
+                sum -= 9
+        }
+        return (sum % 10 == 0);
     }
 }
