@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -22,44 +21,101 @@
             android:layout_marginTop="60dp"
             android:ellipsize="start"
             android:gravity="center"
-            android:hint="Enter package details"
+            android:hint="@string/title"
             android:textColor="@color/purple_200"
-            android:textSize="30sp"
-            android:textStyle="bold" />
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/helloView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="10dp"
             android:ellipsize="start"
             android:gravity="center"
-            android:textColor="@color/purple_200"
+            android:textColor="@color/gray"
             android:textSize="18sp" />
 
-        <Spinner
-            android:id="@+id/pkt_weight_spinner"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
-            android:background="@color/purple_200"
-            android:spinnerMode="dialog" />
+            android:background="@color/gray"
+            android:orientation="horizontal">
 
-        <Spinner
-            android:id="@+id/pkt_type_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="20dp"
-            android:background="@color/purple_200"
-            android:spinnerMode="dialog" />
+            <Spinner
+                android:id="@+id/pkt_weight_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:layout_marginStart="5dp"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:spinnerMode="dialog" />
 
-        <Spinner
-            android:id="@+id/pkt_addressee_spinner"
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_baseline_keyboard_arrow_down_24" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
-            android:background="@color/purple_200"
-            android:spinnerMode="dialog" />
+            android:background="@color/gray"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/pkt_type_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:layout_marginStart="5dp"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:spinnerMode="dialog" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_baseline_keyboard_arrow_down_24" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/gray"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/pkt_addressee_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:layout_marginStart="5dp"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:spinnerMode="dialog" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_baseline_keyboard_arrow_down_24" />
+        </RelativeLayout>
+
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayoutID"
@@ -71,7 +127,7 @@
                 android:id="@+id/textInputEditTextPhone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Recipient's phone number"
+                android:hint="@string/recipient_phone"
                 android:inputType="phone"
                 android:maxLines="1"
                 android:textColor="@android:color/black" />
@@ -92,7 +148,9 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Is there fragile content?" />
+                android:hint="@string/is_fragile"
+                android:textColor="@color/purple_200"
+                android:textSize="20sp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.AppCompatButton
@@ -101,7 +159,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:background="@color/colorTextHint"
-            android:text="Insert package to store" />
+            android:text="@string/butten_insert" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/appCompatTextViewLogoutLink"
@@ -109,7 +167,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:gravity="center"
-            android:text="Log out"
+            android:text="@string/logout"
             android:textSize="16sp" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.constraintlayout.widget.ConstraintLayout>

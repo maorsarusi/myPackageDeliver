@@ -8,16 +8,21 @@
         <entry key="..\:/Users/maor/AndroidStudioProjects/mypackagedeliver/app/src/main/res/layout/activity_home.xml" value="0.25" />
         <entry key="..\:/Users/maor/AndroidStudioProjects/mypackagedeliver/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Users/nevoc/AppData/Local/Android/Sdk/platforms/android-31/data/res/layout/simple_spinner_item.xml" value="0.1609375" />
+        <entry key="..\:/Users/nevoc/kotlinWork/myPackageDeliver/app/src/main/res/drawable/background.xml" value="0.1484375" />
         <entry key="..\:/Users/nevoc/kotlinWork/myPackageDeliver/app/src/main/res/drawable/btn_custom.xml" value="0.22447916666666667" />
         <entry key="..\:/Users/nevoc/kotlinWork/myPackageDeliver/app/src/main/res/drawable/et_custom.xml" value="0.22447916666666667" />
         <entry key="..\:/Users/nevoc/kotlinWork/myPackageDeliver/app/src/main/res/drawable/ic_arrow_left.xml" value="0.22447916666666667" />
         <entry key="..\:/Users/nevoc/kotlinWork/myPackageDeliver/app/src/main/res/drawable/ic_arrow_right.xml" value="0.22447916666666667" />
-        <entry key="..\:/Users/nevoc/kotlinWork/myPackageDeliver/app/src/main/res/layout/activity_home.xml" value="0.176" />
+        <entry key="..\:/Users/nevoc/kotlinWork/myPackageDeliver/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1484375" />
+        <entry key="..\:/Users/nevoc/kotlinWork/myPackageDeliver/app/src/main/res/layout/activity_home.xml" value="0.2" />
         <entry key="..\:/Users/nevoc/kotlinWork/myPackageDeliver/app/src/main/res/layout/activity_login.xml" value="0.176" />
         <entry key="..\:/Users/nevoc/kotlinWork/myPackageDeliver/app/src/main/res/layout/activity_new_pak.xml" value="0.264" />
         <entry key="..\:/Users/nevoc/kotlinWork/myPackageDeliver/app/src/main/res/layout/activity_register.xml" value="0.176" />
         <entry key="..\:/Users/nevoc/kotlinWork/myPackageDeliver/app/src/main/res/layout/activity_splash.xml" value="0.161231884057971" />
+        <entry key="..\:/Users/nevoc/kotlinWork/myPackageDeliver/app/src/main/res/layout/simple_spinner_dropdown.xml" value="0.128125" />
+        <entry key="..\:/Users/nevoc/kotlinWork/myPackageDeliver/app/src/main/res/layout/spinner_text.xml" value="0.128125" />
         <entry key="..\:/Users/nevoc/kotlinWork/myPackageDeliver/app/src/main/res/layout/spinner_type.xml" value="0.1609375" />
+        <entry key="..\:/Users/nevoc/kotlinWork/myPackageDeliver/app/src/main/res/layout/test.xml" value="0.4" />
       </map>
     </option>
   </component>
