@@ -27,8 +27,6 @@ class LoginActivity : AppCompatActivity() {
     var firebaseAuth: FirebaseAuth? = null
     var firebaseDatabase: FirebaseDatabase? = null
 
-    private var mAuthStateListener: AuthStateListener? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

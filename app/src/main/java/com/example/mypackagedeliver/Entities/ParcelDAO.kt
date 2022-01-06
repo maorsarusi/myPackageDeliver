@@ -10,5 +10,5 @@ interface ParcelDAO {
     suspend fun insertParcel(parcel: Parcel)
 
     //@Query(select * FROM parcel_data_table ORDER BY parcel_id ASC)
-    suspend fun readAllData():LiveData<List<Parcel>>
+    suspend fun readAllData(): LiveData<List<Parcel>>
 }
