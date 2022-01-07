@@ -1,6 +1,7 @@
 package com.example.mypackagedeliver.UI.MainActivity
 
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -17,29 +18,27 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.getValue
-import java.lang.reflect.Type
 
 
 class Home : AppCompatActivity() {
     var firebaseAuth: FirebaseAuth? = null
     var firebaseDatabase: FirebaseDatabase? = null
-    var currentEmail: String? = ""
-    var currentName: String? = ""
-    var pkt_type: String? = ""
-    var pkt_weight: String? = ""
-    var pkt_owner_name: String? = ""
-    var pkt_lat: String? = ""
-    var pkt_lon: String? = ""
+    var currentEmail: String = ""
+    var currentName: String = ""
+    var pktType: String = ""
+    var pktWeight: String = ""
+    var pktOwnerName: String = ""
+    var pktLat: String = ""
+    var pktLon: String = ""
 
-    var pkt_id: String? = ""
-
+    @SuppressLint("UseSwitchCompatOrMaterialCode", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
 
-        currentName = intent.getStringExtra("name")
-        currentEmail = intent.getStringExtra("email")
+        currentName = intent.getStringExtra("name").toString()
+        currentEmail = intent.getStringExtra("email").toString()
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseDatabase = FirebaseDatabase.getInstance()
 
@@ -51,7 +50,6 @@ class Home : AppCompatActivity() {
             firebaseAuth!!.signOut()
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
-            finish()
         }
 
         typeSpinner()
@@ -76,90 +74,69 @@ class Home : AppCompatActivity() {
             val weighSpinner = findViewById<Spinner>(R.id.pkt_weight_spinner)
             val addresseeSpinner = findViewById<Spinner>(R.id.pkt_addressee_spinner)
 
-            if (weighSpinner.selectedItemPosition == 0) {
-                Toast.makeText(
-                    applicationContext,
-                    "Please select the package weight",
-                    Toast.LENGTH_LONG
-                ).show()
-            } else if (typeSpinner.selectedItemPosition == 0) {
-                Toast.makeText(
-                    applicationContext,
-                    "Please select the package type",
-                    Toast.LENGTH_LONG
-                ).show()
-            } else if (addresseeSpinner.selectedItemPosition == 0) {
-                Toast.makeText(
-                    applicationContext,
-                    "Please select who the package is for",
-                    Toast.LENGTH_LONG
-                ).show()
-            } else {
-                val currentPkt = Package(
-                    pkt_weight,
-                    pkt_type,
-                    pkt_owner_name,
-                    phoneNumberString,
-                    isFragile,
-                    pkt_lon,
-                    pkt_lat,
-                    currentName
-                )
+            when {
+                weighSpinner.selectedItemPosition == 0 -> {
+                    Toast.makeText(
+                        applicationContext,
+                        "Please select the package weight",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+                typeSpinner.selectedItemPosition == 0 -> {
+                    Toast.makeText(
+                        applicationContext,
+                        "Please select the package type",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+                addresseeSpinner.selectedItemPosition == 0 -> {
+                    Toast.makeText(
+                        applicationContext,
+                        "Please select who the package is for",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+                else -> {
+                    val pktId = firebaseDatabase!!.getReference("packages").push().key.toString()
+                    val pack =
+                        insertPktIntoFireBase(
+                            pktOwnerName,
+                            isFragile,
+                            pktLat,
+                            pktLon,
+                            pktId,
+                            phoneNumberString,
+                            currentName,
+                            pktType,
+                            pktWeight
+                        )
 
-                countPackages(object : GetNumOfPkt {
-                    override fun onGet(value: Int?) {
-                        firebaseDatabase!!.getReference("packages")
-                            .child(value.toString())
-                            .setValue(currentPkt)
-                            .addOnSuccessListener {
-                                Toast.makeText(
-                                    this@Home,
-                                    "You have send the package",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                    }
-                })
+                    firebaseDatabase!!.getReference("packages")
+                        .child(pktId)
+                        .setValue(pack)
+                        .addOnSuccessListener {
+                            Toast.makeText(
+                                this@Home,
+                                "You have send the package",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
 
-                typeSpinner.setSelection(0)
-                weighSpinner.setSelection(0)
-                addresseeSpinner.setSelection(0)
-                fragileSwitch.isChecked = false
-                phoneNumberET.setText("")
+                    typeSpinner.setSelection(0)
+                    weighSpinner.setSelection(0)
+                    addresseeSpinner.setSelection(0)
+                    fragileSwitch.isChecked = false
+                    phoneNumberET.setText("")
+                }
             }
-
-
-//            val pack =
-//                insertIntoFireBase(
-//                    count,
-//                    owner,
-//                    pkt_type,
-//                    weight,
-//                    lng,
-//                    lat,
-//                    address,
-//                    fragile,
-//                    phone
-//                )
-//
-//            packagesDB.child(count.toString()).setValue(pack)
-//            Toast.makeText(
-//                applicationContext,
-//                "the package with id $count is stored",
-//                Toast.LENGTH_LONG
-//            ).show()
-//            count++
         }
 
     }
 
     private fun typeSpinner() {
-        val systemTypes: MutableList<String> = mutableListOf(
-            "",
-            Types.Big.toString(),
-            Types.Small.toString(),
-            Types.Envelop.toString()
-        )
+        val systemTypes: MutableList<String> = mutableListOf("")
+        for (curType in Types.values())
+            systemTypes.add(curType.type)
         val arrayAdapter =
             ArrayAdapter(this, android.R.layout.simple_spinner_item, systemTypes)
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -178,31 +155,27 @@ class Home : AppCompatActivity() {
             ) {
                 when (position) {
                     1 -> {
-                        pkt_type = Types.Envelop.type
+                        pktType = Types.Envelop.type
                     }
                     2 -> {
-                        pkt_type = Types.Small.type
+                        pktType = Types.Small.type
                     }
                     3 -> {
-                        pkt_type = Types.Big.type
+                        pktType = Types.Big.type
                     }
                 }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                pkt_type = "Unknown"
+                pktType = "Unknown"
             }
         }
     }
 
     private fun weightSpinner() {
-        val systemWeights: MutableList<String> = mutableListOf(
-            "",
-            Weights.TwentyKg.toString(),
-            Weights.FiveKg.toString(),
-            Weights.Kg.toString(),
-            Weights.HalfKg.toString()
-        )
+        val systemWeights: MutableList<String> = mutableListOf("")
+        for (curWeight in Weights.values())
+            systemWeights.add(curWeight.weight)
         val arrayAdapter =
             ArrayAdapter(this, android.R.layout.simple_spinner_item, systemWeights)
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -221,22 +194,22 @@ class Home : AppCompatActivity() {
             ) {
                 when (position) {
                     1 -> {
-                        pkt_weight = Weights.HalfKg.weight
+                        pktWeight = Weights.HalfKg.weight
                     }
                     2 -> {
-                        pkt_weight = Weights.Kg.weight
+                        pktWeight = Weights.Kg.weight
                     }
                     3 -> {
-                        pkt_weight = Weights.FiveKg.weight
+                        pktWeight = Weights.FiveKg.weight
                     }
                     4 -> {
-                        pkt_weight = Weights.TwentyKg.weight
+                        pktWeight = Weights.TwentyKg.weight
                     }
                 }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                pkt_weight = "Unknown"
+                pktWeight = "Unknown"
             }
         }
     }
@@ -259,26 +232,15 @@ class Home : AppCompatActivity() {
                 id: Long
             ) {
                 if (position != 0) {
-                    pkt_owner_name = systemUsers[position]
+                    pktOwnerName = systemUsers[position]
                     addSpinner.setSelection(position)
                 }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                pkt_owner_name = "Unknown"
+                pktOwnerName = "Unknown"
             }
         }
-    }
-
-    private fun countPackages(getNumOfPkt: GetNumOfPkt) {
-        val pktListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                getNumOfPkt.onGet(dataSnapshot.children.count() + 1)
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {}
-        }
-        firebaseDatabase!!.getReference("users").addValueEventListener(pktListener)
     }
 
     private fun getNamesPackages(getNameOfPkt: GetNameOfPkt) {
@@ -297,25 +259,29 @@ class Home : AppCompatActivity() {
         firebaseDatabase!!.getReference("users").addValueEventListener(pktListener)
     }
 
-    private fun insertIntoFireBase(
-        count: Int,
-        owner: String,
-        type: String,
-        weight: String,
-        lng: String,
-        lat: String,
-        address: String,
+    private fun insertPktIntoFireBase(
+        addressee: String,
         fragile: String,
-        phone: String
-    ): Parcel {
-        return Parcel(count, owner, address, type, weight, lng, lat, fragile, phone)
-
+        latitude: String,
+        longitude: String,
+        pktId: String,
+        phone: String,
+        sender: String,
+        type: String,
+        weight: String
+    ): PackageParcel {
+        return PackageParcel(
+            addressee,
+            fragile,
+            latitude,
+            longitude,
+            pktId,
+            phone,
+            sender,
+            type,
+            weight
+        )
     }
-
-}
-
-interface GetNumOfPkt {
-    fun onGet(value: Int?)
 }
 
 interface GetNameOfPkt {

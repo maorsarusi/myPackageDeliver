@@ -2,17 +2,17 @@ package com.example.mypackagedeliver.Data.RegisteredParcels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.mypackagedeliver.Entities.User
+import com.example.mypackagedeliver.Entities.UserParcel
 
 class PackagesViewModel: ViewModel() {
 
-    private val users: MutableLiveData<List<User>> by lazy {
-        MutableLiveData<List<User>>().also {
+    private val users: MutableLiveData<List<UserParcel>> by lazy {
+        MutableLiveData<List<UserParcel>>().also {
             loadUsers()
         }
     }
 
-    fun getUsers(): LiveData<List<User>> {
+    fun getUsers(): LiveData<List<UserParcel>> {
         return users
     }
 

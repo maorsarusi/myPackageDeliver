@@ -3,20 +3,15 @@ package com.example.mypackagedeliver.UI.Login
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatTextView
 import com.example.mypackagedeliver.R
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.database.FirebaseDatabase
 
-import android.widget.TextView
-import com.example.mypackagedeliver.Entities.User
+import com.example.mypackagedeliver.Entities.UserParcel
 
 
 class RegisterActivity : AppCompatActivity() {
@@ -108,13 +103,14 @@ class RegisterActivity : AppCompatActivity() {
                                     Toast.LENGTH_SHORT
                                 ).show()
                             } else {
-                                val currentUser = User(
+                                val currentUser = insertUserIntoFireBase(
                                     addressString,
                                     emailString,
                                     firstNameString,
                                     lastNameString,
                                     idNumString.toInt(),
                                 )
+
                                 val uid = task.result!!.user!!.uid
                                 firebaseDatabase!!.getReference("users").child(uid)
                                     .setValue(currentUser)
@@ -125,13 +121,14 @@ class RegisterActivity : AppCompatActivity() {
                                                 "You have successfully registered",
                                                 Toast.LENGTH_SHORT
                                             ).show()
-
-                                            val intent = Intent(this, LoginActivity::class.java)
-                                            finish()
                                         }
                                     }
                             }
                         }
+
+                    mFirebaseAuth!!.signOut()
+                    val intent = Intent(this, LoginActivity::class.java)
+                    startActivity(intent)
                 }
             }
         }
@@ -146,5 +143,15 @@ class RegisterActivity : AppCompatActivity() {
                 sum -= 9
         }
         return (sum % 10 == 0);
+    }
+
+    private fun insertUserIntoFireBase(
+        address: String,
+        email: String,
+        first_name: String,
+        last_name: String,
+        user_id: Int,
+    ): UserParcel {
+        return UserParcel(address, email, first_name, last_name, user_id)
     }
 }

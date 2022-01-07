@@ -3,17 +3,15 @@ package com.example.mypackagedeliver.UI.Login
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatTextView
 import com.example.mypackagedeliver.Entities.User
+import com.example.mypackagedeliver.Entities.UserParcel
 import com.example.mypackagedeliver.R
 import com.example.mypackagedeliver.UI.MainActivity.Home
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuth.AuthStateListener
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.DatabaseError
 

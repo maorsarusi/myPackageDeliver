@@ -9,6 +9,7 @@ class Package {
     var longitude: String? = null
     var latitude: String? = null
     var sender: String? = null
+    var pktId: String? = null
 
     constructor() {}
 
@@ -20,7 +21,8 @@ class Package {
         fragile: String?,
         longitude: String?,
         latitude: String?,
-        sender: String?
+        sender: String?,
+        pktId: String?
     ) {
         this.weight = weight
         this.type = type
@@ -30,5 +32,6 @@ class Package {
         this.longitude = longitude
         this.latitude = latitude
         this.sender = sender
+        this.pktId = pktId
     }
 }
