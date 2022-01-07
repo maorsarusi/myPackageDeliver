@@ -31,8 +31,8 @@ class RegisterActivity : AppCompatActivity() {
         val password = findViewById<EditText>(R.id.textInputEditTextPassword)
         val confirmPassword = findViewById<EditText>(R.id.textInputEditTextConfirmPassword)
 
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        firebaseDatabase = FirebaseDatabase.getInstance();
+        mFirebaseAuth = FirebaseAuth.getInstance()
+        firebaseDatabase = FirebaseDatabase.getInstance()
 
         val buttonLogin: AppCompatTextView = findViewById(R.id.appCompatTextViewLoginLink)
         buttonLogin.setOnClickListener {
@@ -81,16 +81,16 @@ class RegisterActivity : AppCompatActivity() {
                     idNum.requestFocus()
                 }
                 passwordString.isEmpty() -> {
-                    password.error = "Please provide password";
-                    password.requestFocus();
+                    password.error = "Please provide password"
+                    password.requestFocus()
                 }
                 confirmPasswordString.isEmpty() -> {
-                    confirmPassword.error = "Please provide confirm password";
-                    confirmPassword.requestFocus();
+                    confirmPassword.error = "Please provide confirm password"
+                    confirmPassword.requestFocus()
                 }
                 passwordString != confirmPasswordString -> {
-                    confirmPassword.error = "Please provide identical Passwords";
-                    confirmPassword.requestFocus();
+                    confirmPassword.error = "Please provide identical Passwords"
+                    confirmPassword.requestFocus()
                 }
                 else -> {
                     mFirebaseAuth!!.createUserWithEmailAndPassword(emailString, passwordString)
@@ -135,14 +135,14 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun idValidator(id: String): Boolean {
-        var sum: Int = 0
+        var sum = 0
         for (i in 0..8) {
             val incNum = id[i].digitToInt() * ((i % 2) + 1)
             sum += incNum
             if (incNum > 9)
                 sum -= 9
         }
-        return (sum % 10 == 0);
+        return (sum % 10 == 0)
     }
 
     private fun insertUserIntoFireBase(

@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatTextView
 import com.example.mypackagedeliver.Entities.User
-import com.example.mypackagedeliver.Entities.UserParcel
 import com.example.mypackagedeliver.R
 import com.example.mypackagedeliver.UI.MainActivity.Home
 import com.google.firebase.auth.FirebaseAuth
@@ -51,12 +50,12 @@ class LoginActivity : AppCompatActivity() {
 
             when {
                 emailString.isEmpty() -> {
-                    email.error = "Please provide email id";
-                    email.requestFocus();
+                    email.error = "Please provide email id"
+                    email.requestFocus()
                 }
                 passwordString.isEmpty() -> {
-                    password.error = "Please provide password";
-                    password.requestFocus();
+                    password.error = "Please provide password"
+                    password.requestFocus()
                 }
                 else -> {
                     firebaseAuth!!.signInWithEmailAndPassword(emailString, passwordString)
