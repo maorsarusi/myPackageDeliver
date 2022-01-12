@@ -1,17 +1,26 @@
 package com.example.mypackagedeliver.UI.MainActivity
 
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.app.ActivityCompat
 import com.example.mypackagedeliver.R
 import com.example.mypackagedeliver.Entities.*
 import com.example.mypackagedeliver.UI.Login.LoginActivity
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -28,8 +37,8 @@ class Home : AppCompatActivity() {
     var pktType: String = ""
     var pktWeight: String = ""
     var pktOwnerName: String = ""
-    var pktLat: String = ""
-    var pktLon: String = ""
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    lateinit var myLocation: Location
 
     @SuppressLint("UseSwitchCompatOrMaterialCode", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +50,8 @@ class Home : AppCompatActivity() {
         currentEmail = intent.getStringExtra("email").toString()
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseDatabase = FirebaseDatabase.getInstance()
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        getLocation()
 
         val helloView: TextView = findViewById(R.id.helloView)
         helloView.text = "Hello $currentName!"
@@ -74,6 +85,7 @@ class Home : AppCompatActivity() {
             val weighSpinner = findViewById<Spinner>(R.id.pkt_weight_spinner)
             val addresseeSpinner = findViewById<Spinner>(R.id.pkt_addressee_spinner)
 
+
             when {
                 weighSpinner.selectedItemPosition == 0 -> {
                     Toast.makeText(
@@ -99,16 +111,16 @@ class Home : AppCompatActivity() {
                 else -> {
                     val pktId = firebaseDatabase!!.getReference("packages").push().key.toString()
                     val pack =
-                        insertPktIntoFireBase(
-                            pktOwnerName,
-                            isFragile,
-                            pktLat,
-                            pktLon,
-                            pktId,
-                            phoneNumberString,
-                            currentName,
+                        Parcel(
+                            pktWeight,
                             pktType,
-                            pktWeight
+                            pktOwnerName,
+                            phoneNumberString,
+                            isFragile,
+                            myLocation.longitude.toString(),
+                            myLocation.latitude.toString(),
+                            currentName,
+                            pktId
                         )
 
                     firebaseDatabase!!.getReference("packages")
@@ -259,28 +271,52 @@ class Home : AppCompatActivity() {
         firebaseDatabase!!.getReference("users").addValueEventListener(pktListener)
     }
 
-    private fun insertPktIntoFireBase(
-        addressee: String,
-        fragile: String,
-        latitude: String,
-        longitude: String,
-        pktId: String,
-        phone: String,
-        sender: String,
-        type: String,
-        weight: String
-    ): PackageParcel {
-        return PackageParcel(
-            addressee,
-            fragile,
-            latitude,
-            longitude,
-            pktId,
-            phone,
-            sender,
-            type,
-            weight
-        )
+    private fun getLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                1
+            )
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                2
+            )
+            return
+        }
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location: Location? ->
+                myLocation = location!!
+            }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            1 -> {
+                // If request is cancelled, the result arrays are empty.
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    getLocation()
+                }
+            }
+            2 -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    getLocation()
+                } else {
+                    Toast.makeText(this, "Location request was denied", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
     }
 }
 

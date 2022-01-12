@@ -9,7 +9,7 @@
     android:paddingTop="20dp"
     android:paddingRight="20dp"
     android:paddingBottom="20dp"
-    tools:context=".UI.Login.RegisterActivity">
+    tools:context=".UI.Login.LoginActivity">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"

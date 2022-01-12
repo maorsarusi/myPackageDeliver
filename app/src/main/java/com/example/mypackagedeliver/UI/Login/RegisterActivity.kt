@@ -1,17 +1,18 @@
 package com.example.mypackagedeliver.UI.Login
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatTextView
+import com.example.mypackagedeliver.Entities.User
 import com.example.mypackagedeliver.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-
-import com.example.mypackagedeliver.Entities.UserParcel
 
 
 class RegisterActivity : AppCompatActivity() {
@@ -109,7 +110,7 @@ class RegisterActivity : AppCompatActivity() {
                                     Toast.LENGTH_SHORT
                                 ).show()
                             } else {
-                                val currentUser = insertUserIntoFireBase(
+                                val currentUser = User(
                                     addressString,
                                     emailString,
                                     firstNameString,
@@ -133,7 +134,6 @@ class RegisterActivity : AppCompatActivity() {
                             }
                         }
 
-                    mFirebaseAuth!!.signOut()
                     val intent = Intent(this, LoginActivity::class.java)
                     startActivity(intent)
                 }
@@ -150,16 +150,5 @@ class RegisterActivity : AppCompatActivity() {
                 sum -= 9
         }
         return (sum % 10 == 0)
-    }
-
-    private fun insertUserIntoFireBase(
-        address: String,
-        email: String,
-        first_name: String,
-        last_name: String,
-        user_id: Int,
-        phone: String
-    ): UserParcel {
-        return UserParcel(address, email, first_name, last_name, user_id, phone)
     }
 }

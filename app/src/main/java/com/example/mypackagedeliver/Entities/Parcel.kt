@@ -1,6 +1,6 @@
 package com.example.mypackagedeliver.Entities
 
-class Package {
+class Parcel {
     var weight: String? = null
     var type: String? = null
     var addressee: String? = null
