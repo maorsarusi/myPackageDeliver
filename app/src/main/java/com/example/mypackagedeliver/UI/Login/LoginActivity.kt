@@ -21,8 +21,8 @@ import com.google.firebase.database.ktx.getValue
 
 
 class LoginActivity : AppCompatActivity() {
-    var firebaseAuth: FirebaseAuth? = null
-    var firebaseDatabase: FirebaseDatabase? = null
+    private var firebaseAuth: FirebaseAuth? = null
+    private var firebaseDatabase: FirebaseDatabase? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

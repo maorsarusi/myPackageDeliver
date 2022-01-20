@@ -1,24 +1,30 @@
 package com.example.mypackagedeliver.UI.Login
 
-import android.content.ContentValues.TAG
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.app.ActivityCompat
 import com.example.mypackagedeliver.Entities.User
 import com.example.mypackagedeliver.R
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
 
 class RegisterActivity : AppCompatActivity() {
 
-    var mFirebaseAuth: FirebaseAuth? = null
-    var firebaseDatabase: FirebaseDatabase? = null
+    private var mFirebaseAuth: FirebaseAuth? = null
+    private var firebaseDatabase: FirebaseDatabase? = null
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var myLocation: Location
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +33,6 @@ class RegisterActivity : AppCompatActivity() {
         val firstName = findViewById<EditText>(R.id.textInputEditTextFirstName)
         val lastName = findViewById<EditText>(R.id.textInputEditTextLastName)
         val email = findViewById<EditText>(R.id.textInputEditTextEmail)
-        val address = findViewById<EditText>(R.id.textInputEditTextAddress)
         val idNum = findViewById<EditText>(R.id.textInputEditTextID)
         val phone = findViewById<EditText>(R.id.textInputEditTextPhone)
         val password = findViewById<EditText>(R.id.textInputEditTextPassword)
@@ -35,6 +40,8 @@ class RegisterActivity : AppCompatActivity() {
 
         mFirebaseAuth = FirebaseAuth.getInstance()
         firebaseDatabase = FirebaseDatabase.getInstance()
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        getLocation()
 
         val buttonLogin: AppCompatTextView = findViewById(R.id.appCompatTextViewLoginLink)
         buttonLogin.setOnClickListener {
@@ -48,7 +55,6 @@ class RegisterActivity : AppCompatActivity() {
             val firstNameString = firstName.text.toString().trim { it <= ' ' }
             val lastNameString = lastName.text.toString().trim { it <= ' ' }
             val emailString = email.text.toString().trim { it <= ' ' }
-            val addressString = address.text.toString().trim { it <= ' ' }
             val idNumString = idNum.text.toString().trim { it <= ' ' }
             val phoneString = phone.text.toString().trim { it <= ' ' }
             val passwordString = password.text.toString().trim { it <= ' ' }
@@ -66,10 +72,6 @@ class RegisterActivity : AppCompatActivity() {
                 emailString.isEmpty() -> {
                     email.error = "Please provide email id"
                     email.requestFocus()
-                }
-                addressString.isEmpty() -> {
-                    address.error = "Please provide your address"
-                    address.requestFocus()
                 }
                 idNumString.isEmpty() -> {
                     idNum.error = "Please provide your id"
@@ -111,10 +113,11 @@ class RegisterActivity : AppCompatActivity() {
                                 ).show()
                             } else {
                                 val currentUser = User(
-                                    addressString,
                                     emailString,
                                     firstNameString,
                                     lastNameString,
+                                    myLocation.latitude.toString(),
+                                    myLocation.longitude.toString(),
                                     idNumString.toInt(),
                                     phoneString
                                 )
@@ -131,11 +134,10 @@ class RegisterActivity : AppCompatActivity() {
                                             ).show()
                                         }
                                     }
+                                val intent = Intent(this, LoginActivity::class.java)
+                                startActivity(intent)
                             }
                         }
-
-                    val intent = Intent(this, LoginActivity::class.java)
-                    startActivity(intent)
                 }
             }
         }
@@ -150,5 +152,53 @@ class RegisterActivity : AppCompatActivity() {
                 sum -= 9
         }
         return (sum % 10 == 0)
+    }
+
+    private fun getLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                1
+            )
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                2
+            )
+            return
+        }
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location: Location? ->
+                myLocation = location!!
+            }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            1 -> {
+                // If request is cancelled, the result arrays are empty.
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    getLocation()
+                }
+            }
+            2 -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    getLocation()
+                } else {
+                    Toast.makeText(this, "Location request was denied", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
     }
 }

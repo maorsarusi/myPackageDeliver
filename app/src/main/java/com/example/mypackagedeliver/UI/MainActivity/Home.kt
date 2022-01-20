@@ -6,7 +6,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -18,8 +17,6 @@ import com.example.mypackagedeliver.R
 import com.example.mypackagedeliver.Entities.*
 import com.example.mypackagedeliver.UI.Login.LoginActivity
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -30,15 +27,15 @@ import com.google.firebase.database.ktx.getValue
 
 
 class Home : AppCompatActivity() {
-    var firebaseAuth: FirebaseAuth? = null
-    var firebaseDatabase: FirebaseDatabase? = null
-    var currentEmail: String = ""
-    var currentName: String = ""
-    var pktType: String = ""
-    var pktWeight: String = ""
-    var pktOwnerName: String = ""
+    private var firebaseAuth: FirebaseAuth? = null
+    private var firebaseDatabase: FirebaseDatabase? = null
+    private var currentEmail: String = ""
+    private var currentName: String = ""
+    private var pktType: String = ""
+    private var pktWeight: String = ""
+    private var pktOwnerName: String = ""
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    lateinit var myLocation: Location
+    private lateinit var myLocation: Location
 
     @SuppressLint("UseSwitchCompatOrMaterialCode", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -280,12 +277,12 @@ class Home : AppCompatActivity() {
         ) {
             ActivityCompat.requestPermissions(
                 this,
-                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 1
             )
             ActivityCompat.requestPermissions(
                 this,
-                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 2
             )
             return
