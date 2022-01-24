@@ -3,13 +3,16 @@ package com.example.mypackagedeliver.UI.MainActivity
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.InputType
 import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.app.ActivityCompat
@@ -36,6 +39,8 @@ class Home : AppCompatActivity() {
     private var pktOwnerName: String = ""
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var myLocation: Location
+    private  var  lng : String = (-1.0).toString()
+    private   var lat : String = (-1.0).toString()
 
     @SuppressLint("UseSwitchCompatOrMaterialCode", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,6 +65,16 @@ class Home : AppCompatActivity() {
             startActivity(intent)
         }
 
+        val dialog  = AlertDialog.Builder(this)
+        dialog.setTitle("Change Location")
+        //     val lng = myLocation.longitude.toString()
+        dialog.setMessage("Pay attention!, the LNG and LAT has been filled automatic,do you want to change them?")
+        dialog.setPositiveButton("yes", DialogInterface.OnClickListener { dialog, id -> setLngLat() })
+        dialog.setNegativeButton("no",DialogInterface.OnClickListener{
+                dialog, id -> dialog.cancel()
+        })
+        dialog.show()
+
         typeSpinner()
         weightSpinner()
         getNamesPackages(object : GetNameOfPkt {
@@ -69,6 +84,7 @@ class Home : AppCompatActivity() {
                 }
             }
         })
+
 
         val buttonStore: AppCompatButton = findViewById(R.id.appCompatButtonStore)
         buttonStore.setOnClickListener {
@@ -106,6 +122,13 @@ class Home : AppCompatActivity() {
                     ).show()
                 }
                 else -> {
+                    if(lng == "-1.0" && lat == "-1.0")
+                    {
+                        lng = myLocation.longitude.toString()
+                        lat = myLocation.latitude.toString()
+                    }
+
+
                     val pktId = firebaseDatabase!!.getReference("packages").push().key.toString()
                     val pack =
                         Parcel(
@@ -114,8 +137,8 @@ class Home : AppCompatActivity() {
                             pktOwnerName,
                             phoneNumberString,
                             isFragile,
-                            myLocation.longitude.toString(),
-                            myLocation.latitude.toString(),
+                            lng,
+                            lat,
                             currentName,
                             pktId
                         )
@@ -139,6 +162,33 @@ class Home : AppCompatActivity() {
                 }
             }
         }
+
+    }
+
+    private fun setLngLat() {
+        val dialog  = AlertDialog.Builder(this)
+        dialog.setTitle("Change Location")
+        val layout : LinearLayout = LinearLayout(this)
+        layout.orientation = LinearLayout.VERTICAL
+
+        //     val lng = myLocation.longitude.toString()
+        dialog.setMessage("insert lng and lat")
+        val inputLng = EditText(this)
+        inputLng.hint = "Enter lng"
+        layout.addView(inputLng)
+
+
+        val inputLat = EditText(this)
+        inputLat.hint = "Enter lat"
+        inputLat.inputType = InputType.TYPE_CLASS_TEXT
+        layout.addView(inputLat)
+        dialog.setView(layout)
+        dialog.setPositiveButton("finish", DialogInterface.OnClickListener {
+                dialog, which -> lng = inputLng.text.toString()
+                lat =inputLat.text.toString()
+        })
+        dialog.setNegativeButton("cancel", DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
+        dialog.show()
 
     }
 
