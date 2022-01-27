@@ -18,13 +18,15 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.app.ActivityCompat
 import com.example.mypackagedeliver.R
 import com.example.mypackagedeliver.Entities.*
-import com.example.mypackagedeliver.Firebase_Manager_User
 import com.example.mypackagedeliver.UI.Login.LoginActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import java.lang.Exception
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.getValue
 
 
 class Home : AppCompatActivity() {
@@ -37,9 +39,8 @@ class Home : AppCompatActivity() {
     private var pktOwnerName: String = ""
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var myLocation: Location
-    private var lng: String = (-1.0).toString()
-    private var lat: String = (-1.0).toString()
-    private var fireBaseMU: Firebase_Manager_User? = null
+    private  var  lng : String = (-1.0).toString()
+    private   var lat : String = (-1.0).toString()
 
     @SuppressLint("UseSwitchCompatOrMaterialCode", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,40 +65,25 @@ class Home : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val dialog = AlertDialog.Builder(this)
+        val dialog  = AlertDialog.Builder(this)
         dialog.setTitle("Change Location")
         //     val lng = myLocation.longitude.toString()
         dialog.setMessage("Pay attention!, the LNG and LAT has been filled automatic,do you want to change them?")
-        dialog.setPositiveButton(
-            "yes",
-            DialogInterface.OnClickListener { dialog, id -> setLngLat() })
-        dialog.setNegativeButton("no", DialogInterface.OnClickListener { dialog, id ->
-            dialog.cancel()
+        dialog.setPositiveButton("yes", DialogInterface.OnClickListener { dialog, id -> setLngLat() })
+        dialog.setNegativeButton("no",DialogInterface.OnClickListener{
+                dialog, id -> dialog.cancel()
         })
         dialog.show()
 
         typeSpinner()
         weightSpinner()
-
-        fireBaseMU = Firebase_Manager_User()
-        fireBaseMU!!.notifyToParcelList(
-            object : Firebase_Manager_User.NotifyDataChange<MutableList<User>> {
-                @SuppressLint("SetTextI18n")
-                override fun OnDataChanged(obj: MutableList<User>) {
-                    val systemUsers: MutableList<String> = mutableListOf("")
-                    for (curUser in obj)
-                        systemUsers.add(curUser.first_name + " " + curUser.last_name)
-                    addresseeSpinner(systemUsers.toTypedArray())
+        getNamesPackages(object : GetNameOfPkt {
+            override fun onGet(value: Array<String>?) {
+                if (value != null) {
+                    addresseeSpinner(value)
                 }
-
-                override fun onFailure(exception: Exception?) {
-                    Toast.makeText(
-                        this@Home,
-                        "error to get users list\n" + exception.toString(),
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            })
+            }
+        })
 
 
         val buttonStore: AppCompatButton = findViewById(R.id.appCompatButtonStore)
@@ -136,7 +122,8 @@ class Home : AppCompatActivity() {
                     ).show()
                 }
                 else -> {
-                    if (lng == "-1.0" && lat == "-1.0") {
+                    if(lng == "-1.0" && lat == "-1.0")
+                    {
                         lng = myLocation.longitude.toString()
                         lat = myLocation.latitude.toString()
                     }
@@ -179,9 +166,9 @@ class Home : AppCompatActivity() {
     }
 
     private fun setLngLat() {
-        val dialog = AlertDialog.Builder(this)
+        val dialog  = AlertDialog.Builder(this)
         dialog.setTitle("Change Location")
-        val layout = LinearLayout(this)
+        val layout : LinearLayout = LinearLayout(this)
         layout.orientation = LinearLayout.VERTICAL
 
         //     val lng = myLocation.longitude.toString()
@@ -196,13 +183,11 @@ class Home : AppCompatActivity() {
         inputLat.inputType = InputType.TYPE_CLASS_TEXT
         layout.addView(inputLat)
         dialog.setView(layout)
-        dialog.setPositiveButton("finish", DialogInterface.OnClickListener { dialog, which ->
-            lng = inputLng.text.toString()
-            lat = inputLat.text.toString()
+        dialog.setPositiveButton("finish", DialogInterface.OnClickListener {
+                dialog, which -> lng = inputLng.text.toString()
+                lat =inputLat.text.toString()
         })
-        dialog.setNegativeButton(
-            "cancel",
-            DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
+        dialog.setNegativeButton("cancel", DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
         dialog.show()
 
     }
@@ -317,6 +302,22 @@ class Home : AppCompatActivity() {
         }
     }
 
+    private fun getNamesPackages(getNameOfPkt: GetNameOfPkt) {
+        val pktListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val systemUsers: MutableList<String> = mutableListOf("")
+                for (curUser in dataSnapshot.children) {
+                    val user = curUser.getValue<User>()
+                    systemUsers.add(user!!.first_name + " " + user.last_name)
+                }
+                getNameOfPkt.onGet(systemUsers.toTypedArray())
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+        }
+        firebaseDatabase!!.getReference("users").addValueEventListener(pktListener)
+    }
+
     private fun getLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
@@ -364,5 +365,9 @@ class Home : AppCompatActivity() {
             }
         }
     }
+}
+
+interface GetNameOfPkt {
+    fun onGet(value: Array<String>?)
 }
 
