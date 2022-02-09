@@ -39,8 +39,8 @@ class Home : AppCompatActivity() {
     private var pktOwnerName: String = ""
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var myLocation: Location
-    private  var  lng : String = (-1.0).toString()
-    private   var lat : String = (-1.0).toString()
+    private  var  lng : String = ""
+    private   var lat : String = ""
 
     @SuppressLint("UseSwitchCompatOrMaterialCode", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -122,7 +122,7 @@ class Home : AppCompatActivity() {
                     ).show()
                 }
                 else -> {
-                    if(lng == "-1.0" && lat == "-1.0")
+                    if(lng == "" || lat == "")
                     {
                         lng = myLocation.longitude.toString()
                         lat = myLocation.latitude.toString()

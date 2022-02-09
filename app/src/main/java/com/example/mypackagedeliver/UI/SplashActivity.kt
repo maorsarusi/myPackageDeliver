@@ -8,6 +8,7 @@ import com.example.mypackagedeliver.R
 import com.example.mypackagedeliver.UI.Login.LoginActivity
 import com.example.mypackagedeliver.UI.Login.RegisterActivity
 
+// the first screen in the app
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
