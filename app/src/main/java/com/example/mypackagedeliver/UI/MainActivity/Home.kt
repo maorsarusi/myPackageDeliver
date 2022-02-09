@@ -63,6 +63,7 @@ class Home : AppCompatActivity() {
             firebaseAuth!!.signOut()
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
         val dialog  = AlertDialog.Builder(this)

@@ -84,6 +84,7 @@ class LoginActivity : AppCompatActivity() {
                                             intent.putExtra("name", name)
                                             intent.putExtra("email", userDetail.email)
                                             startActivity(intent)
+                                            finish()
                                         }
 
                                         override fun onCancelled(error: DatabaseError) {}
